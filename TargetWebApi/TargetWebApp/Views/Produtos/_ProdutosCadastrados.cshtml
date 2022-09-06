@@ -1,0 +1,49 @@
+﻿
+@{
+    Layout = null;
+
+    List<TargetWebApp.Models.ProdutoModel> produtos = ViewBag.produtos != null ? (List<TargetWebApp.Models.ProdutoModel>)ViewBag.produtos : new List<TargetWebApp.Models.ProdutoModel>();
+    List<TargetWebApp.Models.FornecedorModel> fornecedores = ViewBag.fornecedores != null ? (List<TargetWebApp.Models.FornecedorModel>)ViewBag.fornecedores : new List<TargetWebApp.Models.FornecedorModel>();
+}
+
+<thead>
+    <tr>
+        <th>#ID</th>
+        <th>Descrição</th>
+        <th>Cod. Barras</th>
+        <th>Fornecedor</th>
+        <th>Estoque Máximo</th>
+        <th>Estoque Mínimo</th>
+        <th>Valor de Compra</th>
+        <th>Valor de Venda</th>
+        <th>...</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var prod in produtos)
+    {
+        string nomeFornecedor = string.Empty;
+        try
+        {
+            nomeFornecedor = fornecedores.Find(l => l.ID.Equals(prod.ID_Fornecedor)).Descricao;
+        }
+        catch (Exception) { }
+
+        <tr>
+            <td class="text-center">@prod.ID</td>
+            <td class="text-center">@prod.Descricao</td>
+            <td class="text-center">@prod.CodBarras</td>
+            <td class="text-center">@nomeFornecedor</td>
+            <td class="text-center">@prod.EstoqueMaximo</td>
+            <td class="text-center">@prod.EstoqueMinimo</td>
+            <td class="text-center">@TargetWebApp.Util.Utils.DecimalToString(prod.ValorCompra)</td>
+            <td class="text-center">@TargetWebApp.Util.Utils.DecimalToString(prod.ValorVenda)</td>
+            <td>
+                <a role="button" class="btn btn-warning" href="javascript:Alterar('@prod.ID')">Alterar</a>
+                <a role="button" class="btn btn-danger" href="javascript:Excluir('@prod.ID'">Excluir</a>
+            </td>
+        </tr>
+    }
+</tbody>
+
+

@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Produtos";
+
+    List<TargetWebApp.Models.FornecedorModel> fornecedores = ViewBag.fornecedores != null ? (List<TargetWebApp.Models.FornecedorModel>)ViewBag.fornecedores : new List<TargetWebApp.Models.FornecedorModel>();
+}
+
+@section scripts {
+    <script src="~/Scripts/Views/Util.js?v=2"></script>
+    <script src="~/Scripts/Views/produto.js"></script>
+}
+
+<h2>Produtos</h2>
+<form>
+    <div class="row">
+        <div class="col-sm-9">
+            <input type="text" name="txtPalavraChave" id="txtPalavraChave" value=""
+                   class="form-control" placeholder="Procurar..." />
+        </div>
+        <div class="col-sm-1">
+            <button type="button" id="btnPesquisar" class="btn btn-primary">Pesquisar</button>
+        </div>
+
+
+        <div class="col-sm-2">
+            <a role="button" class="btn btn-success"
+               onclick="LimparFormulario()"
+               data-fancybox data-src="#formProdutos"
+               href="javascript:;">Novo Produto</a>
+        </div>
+    </div>
+</form>
+
+
+<hr />
+<h3>produtos Cadastrados</h3>
+<table id="tableProdutos" class="table table-striped table-responsive table-condensed table-hover"></table>
+
+
+@*Fancybox FORM Produtos*@
+<div style="display: none; min-width: 300px; width: 800px" id="formProdutos">
+    <h3>Dados do Produto</h3>
+    <form name="formProdutos" id="formProdutos" action="/Produtos/Gravar" method="post">
+        <input type="hidden" name="Id" id="Id" value="0" />
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 col-md-6">
+                <label for="Descricao">Descrição</label>
+                <input type="text" required name="Descricao" id="Descricao" class="form-control" />
+            </div>
+
+            
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label for="CodBarras">Codido de Barras</label>
+                <input type="text" name="CodBarras" id="CodBarras" class="form-control" />
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label for="IdFornecedor">Fornecedor</label>
+                <select id="IdFornecedor" name="IdFornecedor" class="form-control">
+                    <option value="-1">Selecione</option>
+                    @foreach (var forn in fornecedores)
+                    {
+                        <option value="@forn.ID">@forn.Descricao</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <label for="EstoqueMinimo">Estoque Mínimo</label>
+                    <input type="number" name="EstoqueMinimo" id="EstoqueMinimo" class="form-control" value="0" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <label for="EstoqueMaximo">Estoque Máximo</label>
+                    <input type="number" name="EstoqueMaximo" id="EstoqueMaximo" class="form-control" value="0" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <label for="valorCompra">Valor de Compra</label>
+                    <input type="text" name="valorCompra" id="valorCompra" onkeydown="return(moeda(this,'.',',',event))" class="form-control" value="0,00"/>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <label for="valorVenda">Valor de Venda</label>
+                    <input type="text" name="valorVenda" id="valorVenda" onkeydown="return(moeda(this,'.',',',event))" class="form-control" value="0,00" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-inline">
+            <button type="button" name="btnConfirmar" id="btnConfirmar" class="btn btn-success">Confirmar</button>
+            <button type="button" name="btnCancelar" id="btnCancelar" class="btn btn-danger"
+                    onclick="javascript: LimparFormulario(); $.fancybox.close();">
+                Cancelar
+            </button>
+        </div>
+    </form>
+    <div id="divAlertaNovoProduto" class="alert alert-danger" role="alert" style="display:none"></div>
+</div>
+
